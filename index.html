@@ -431,6 +431,28 @@ body[data-view="setup"] #toasts { bottom: calc(110px + env(safe-area-inset-botto
 .champ .stripe i:nth-child(6n+1) { background: #2ec4b6; } .champ .stripe i:nth-child(6n+2) { background: #ffe066; } .champ .stripe i:nth-child(6n+3) { background: #ff8fb1; }
 .champ .stripe i:nth-child(6n+4) { background: #9ad1f5; } .champ .stripe i:nth-child(6n+5) { background: #ff9f43; } .champ .stripe i:nth-child(6n) { background: #7b4bb8; }
 
+/* ---------- Touch, voice panel, hand rankings ---------- */
+html, body, button, a, input, select, .tile { touch-action: manipulation; }
+.controls, .dock, .status, .top { -webkit-user-select: none; user-select: none; }
+.icon-btn.txt { width: auto; padding: 0 14px; font: 700 .9rem/1 var(--f-ui); }
+.voice-pick { display: grid; gap: 14px; margin-top: 18px; }
+.voice-pick .hint { color: var(--muted); font-size: .88rem; }
+.voice-pick .hint b { color: var(--ink); }
+.sheet.wide { width: min(100%, 64rem); }
+.hands { list-style: none; margin: 16px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(5, auto); grid-auto-flow: column; gap: 12px 18px; }
+.hands li { display: grid; grid-template-columns: 38px minmax(0, 1fr); gap: 6px 12px; align-items: center; background: var(--card); border: var(--bd); border-radius: var(--r-sm); box-shadow: var(--sh-sm); padding: 10px 14px; }
+.hands .no { grid-row: span 2; width: 36px; height: 36px; border-radius: 10px; border: var(--bd); display: grid; place-items: center; font: 400 1rem/1 var(--f-display); color: #1b1b1b; }
+.hands .hd { display: flex; justify-content: space-between; align-items: baseline; gap: 4px 12px; flex-wrap: wrap; }
+.hands .nm { font: 400 1.02rem/1.1 var(--f-display); text-transform: uppercase; }
+.hands .ds { font-size: .82rem; color: var(--muted); font-weight: 600; }
+.cards { display: flex; gap: 5px; }
+.pc { width: 34px; height: 46px; border-radius: 7px; border: 2px solid var(--ink); background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; font: 700 .95rem/1 var(--f-ui); color: #1b1b1b; }
+.pc i { font-style: normal; font-size: 1rem; line-height: 1; }
+.pc.red { color: #c42b37; }
+.pc.off { opacity: .28; }
+@media (max-width: 760px) { .hands { grid-template-columns: 1fr; grid-template-rows: none; grid-auto-flow: row; } }
+@media (max-width: 420px) { .pc { width: 30px; height: 42px; font-size: .85rem; } }
+
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 
 /* ---------- Phones ---------- */
@@ -500,9 +522,10 @@ body[data-view="setup"] #toasts { bottom: calc(110px + env(safe-area-inset-botto
     <span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 1.8C9.2 5.6 3.6 8.7 3.6 13.3c0 2.8 2.2 4.9 4.8 4.9 1.4 0 2.6-.6 3.2-1.5-.2 2-1.1 3.7-2.8 5.1h6.4c-1.7-1.4-2.6-3.1-2.8-5.1.6.9 1.8 1.5 3.2 1.5 2.6 0 4.8-2.1 4.8-4.9 0-4.6-5.6-7.7-8.4-11.5z"/></svg></span>
     <input id="t-name" class="t-name" type="text" maxlength="40" aria-label="Tournament name" autocomplete="off" spellcheck="false">
   </div>
+  <button type="button" class="icon-btn txt" id="hands-btn" aria-haspopup="dialog" title="Hand rankings (H)">Hands</button>
   <div class="hdr-opts">
     <button type="button" class="icon-btn" id="sound" aria-pressed="true" aria-label="Sound effects" title="Sound effects (M)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16V11a6 6 0 1 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2.2 2.2 0 0 0 4 0"/></svg></button>
-    <button type="button" class="icon-btn" id="voice" aria-pressed="true" aria-label="Spoken announcements" title="Spoken announcements"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6"/><path d="M18.3 6.5a7.5 7.5 0 0 1 0 11"/></svg></button>
+    <button type="button" class="icon-btn" id="voice" aria-pressed="false" aria-haspopup="dialog" aria-label="Spoken announcements settings" title="Spoken announcements"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6"/><path d="M18.3 6.5a7.5 7.5 0 0 1 0 11"/></svg></button>
     <button type="button" class="icon-btn" id="fs" aria-label="Full screen" title="Full screen (F)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
   </div>
   <nav class="tabs" aria-label="Views">
@@ -671,7 +694,7 @@ body[data-view="setup"] #toasts { bottom: calc(110px + env(safe-area-inset-botto
         </div>
         <div class="sr" id="c-announce" aria-live="polite"></div>
       </div>
-      <p class="kbd-hint">Keyboard: space starts and pauses · Enter presses the highlighted button · left and right change level · up and down add or take a minute · M mutes · F full screen</p>
+      <p class="kbd-hint">Keyboard: space starts and pauses · Enter presses the highlighted button · left and right change level · up and down add or take a minute · M mutes · H hand rankings · F full screen</p>
     </div>
     <div id="clock-empty" class="empty-clock" hidden>
       <div class="tile"><span class="label">Can&rsquo;t start yet</span><p id="clock-empty-msg"></p><p><a class="text-btn" href="#setup">Back to setup</a></p></div>
@@ -730,6 +753,41 @@ body[data-view="setup"] #toasts { bottom: calc(110px + env(safe-area-inset-botto
     <div class="sheet-foot">
       <button type="button" class="btn outline" data-close="reset-sheet">Keep playing</button>
       <button type="button" class="btn danger" id="reset-ok">Start again</button>
+    </div>
+  </div>
+</div>
+
+<div class="sheet-wrap" id="voice-sheet" hidden>
+  <div class="scrim" data-close="voice-sheet"></div>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="voice-title">
+    <div class="grab" aria-hidden="true"></div>
+    <h2 id="voice-title">Announcements</h2>
+    <p class="sub">The clock can call out each new level, breaks and the last minute.</p>
+    <div class="voice-pick">
+      <button type="button" class="check-row" id="voice-on" role="switch" aria-checked="false">
+        <span><b>Spoken announcements</b><small>Off by default. Sound effects are separate.</small></span>
+        <span class="check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+      </button>
+      <label class="label" for="voice-select">Voice</label>
+      <div class="select-wrap"><select id="voice-select" class="select"></select></div>
+      <p class="hint" id="voice-hint">Sounds robotic? On an iPad, download a natural voice in <b>Settings › Accessibility › Spoken Content › Voices › English</b>, then choose it here. Jamie (Enhanced) is picked automatically when it&rsquo;s installed.</p>
+    </div>
+    <div class="sheet-foot">
+      <button type="button" class="btn outline" id="voice-test">Test voice</button>
+      <button type="button" class="btn primary" data-close="voice-sheet">Done</button>
+    </div>
+  </div>
+</div>
+
+<div class="sheet-wrap" id="hands-sheet" hidden>
+  <div class="scrim" data-close="hands-sheet"></div>
+  <div class="sheet wide" role="dialog" aria-modal="true" aria-labelledby="hands-title">
+    <div class="grab" aria-hidden="true"></div>
+    <h2 id="hands-title">Hand rankings</h2>
+    <p class="sub">Best at the top. Your best five cards from your two and the five on the board count. Equal hands are decided by the highest cards.</p>
+    <ol class="hands" id="hands-list"></ol>
+    <div class="sheet-foot" style="grid-template-columns: 1fr">
+      <button type="button" class="btn primary" data-close="hands-sheet">Close</button>
     </div>
   </div>
 </div>
@@ -1048,6 +1106,29 @@ body[data-view="setup"] #toasts { bottom: calc(110px + env(safe-area-inset-botto
     pause: '<svg viewBox="0 0 24 24"><rect x="6.2" y="5" width="4.2" height="14" rx="1.3" fill="currentColor"/><rect x="13.6" y="5" width="4.2" height="14" rx="1.3" fill="currentColor"/></svg>',
   };
 
+  /* ---------- Hand rankings ---------- */
+  const HANDS = [
+    ['Royal flush', 'A, K, Q, J, 10, all one suit', 'As Ks Qs Js 10s', 5],
+    ['Straight flush', 'Five in a row, all one suit', '9h 8h 7h 6h 5h', 5],
+    ['Four of a kind', 'Four cards of the same rank', 'Qs Qh Qd Qc 7s', 4],
+    ['Full house', 'Three of a kind plus a pair', 'Ks Kh Kd 9c 9h', 5],
+    ['Flush', 'Any five of one suit', 'Ad Jd 8d 6d 2d', 5],
+    ['Straight', 'Five in a row, mixed suits', '10c 9d 8s 7h 6c', 5],
+    ['Three of a kind', 'Three cards of the same rank', '8s 8h 8d Kc 3s', 3],
+    ['Two pair', 'Two different pairs', 'Jh Jc 4s 4d Ah', 4],
+    ['One pair', 'Two cards of the same rank', '10s 10h Kd 7c 2s', 2],
+    ['High card', 'None of the above: highest card plays', 'Ac Qd 9s 6h 3c', 1],
+  ];
+  const SUIT = { s: '\u2660', h: '\u2665', d: '\u2666', c: '\u2663' };
+  const HAND_COLOURS = ['#2ec4b6', '#ffe066', '#ff8fb1', '#9ad1f5', '#ff9f43', '#b9a5ff'];
+  function renderHands() {
+    $('#hands-list').innerHTML = HANDS.map(([name, desc, cards, used], i) => `<li>
+      <span class="no" style="background:${HAND_COLOURS[i % HAND_COLOURS.length]}">${i + 1}</span>
+      <span class="hd"><span class="nm">${name}</span><span class="ds">${desc}</span></span>
+      <span class="cards">${cards.split(' ').map((c, k) => { const r = c.slice(0, -1), su = c.slice(-1); return `<span class="pc${'hd'.includes(su) ? ' red' : ''}${k >= used ? ' off' : ''}" aria-label="${r} of ${{ s: 'spades', h: 'hearts', d: 'diamonds', c: 'clubs' }[su]}"><span>${r}</span><i>${SUIT[su]}</i></span>`; }).join('')}</span>
+    </li>`).join('');
+  }
+
   /* ---------- Chips ---------- */
   const COLOURS = {
     green:    { name: 'Green',     body: '#2f7d55', spot: '#f6f1e7', text: '#fff' },
@@ -1082,7 +1163,7 @@ body[data-view="setup"] #toasts { bottom: calc(110px + env(safe-area-inset-botto
     return {
       v: 2,
       setup: { name: 'Home Game Championship', players: 8, buyIn: 10, lengthMin: 180, levelMin: 'auto', stack: 'auto', antes: false, rebuyOn: 1, rebuyCount: 2, rebuyUntil: 1, preset: 'house', chips: presetChips('house') },
-      clock: freshClock(), live: freshLive(), prefs: { sound: true, voice: true },
+      clock: freshClock(), live: freshLive(), prefs: { sound: true, voice: false, voiceName: '', voiceV: 2 },
     };
   }
   let state = defaults();
@@ -1094,7 +1175,7 @@ body[data-view="setup"] #toasts { bottom: calc(110px + env(safe-area-inset-botto
     if (!Array.isArray(s.chips) || !s.chips.length) s.chips = presetChips('house');
     if (+s.rebuyUntil === 0) { s.rebuyOn = 0; s.rebuyUntil = 1; }
     s.rebuyOn = s.rebuyOn ? 1 : 0; s.rebuyCount = clamp(+s.rebuyCount || 2, 1, 40); s.rebuyUntil = +s.rebuyUntil === 2 ? 2 : 1;
-    return { v: 2, setup: s, clock: Object.assign(freshClock(), d.clock || {}), live: Object.assign(freshLive(), d.live || {}), prefs: Object.assign(base.prefs, d.prefs || {}) };
+    return { v: 2, setup: s, clock: Object.assign(freshClock(), d.clock || {}), live: Object.assign(freshLive(), d.live || {}), prefs: (p => { if (p.voiceV !== 2) { p.voice = false; p.voiceV = 2; } return p; })(Object.assign(base.prefs, d.prefs || {})) };
   }
   let saveTimer = null, lastSave = 0;
   function saveNow() { lastSave = Date.now(); try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { } }
@@ -1187,11 +1268,25 @@ body[data-view="setup"] #toasts { bottom: calc(110px + env(safe-area-inset-botto
   };
   function play(name) { if (state.prefs.sound) try { sfx[name](); } catch (e) { } }
   let voice = null;
-  function pickVoice() { try { const vs = speechSynthesis.getVoices(); voice = vs.find(v => /en[-_]GB/i.test(v.lang) && /Daniel|Arthur|Google UK English Male|Serena|Kate|Oliver|Sonia|Ryan/i.test(v.name)) || vs.find(v => /en[-_]GB/i.test(v.lang)) || vs.find(v => /^en/i.test(v.lang)) || null; } catch (e) { voice = null; } }
-  if ('speechSynthesis' in window) { pickVoice(); try { speechSynthesis.onvoiceschanged = pickVoice; } catch (e) { } }
+  function englishVoices() { try { return speechSynthesis.getVoices().filter(v => /^en/i.test(v.lang)); } catch (e) { return []; } }
+  function voiceScore(v) { let n = 0; if (/Jamie/i.test(v.name)) n += 10; if (/en[-_]GB/i.test(v.lang)) n += 4; if (/premium/i.test(v.name)) n += 3; else if (/enhanced/i.test(v.name)) n += 2; if (/Google UK English|Daniel|Serena|Kate|Oliver|Sonia|Ryan|Arthur|Libby|Stephanie/i.test(v.name)) n += 1; return n; }
+  function sortedVoices() { return englishVoices().sort((a, b) => voiceScore(b) - voiceScore(a) || a.name.localeCompare(b.name)); }
+  function pickVoice() { const vs = sortedVoices(); let want = ''; try { want = state.prefs.voiceName || ''; } catch (e) { } voice = (want && vs.find(v => v.name === want)) || vs[0] || null; if (!$('#voice-sheet').hidden) renderVoiceSheet(); }
+  if ('speechSynthesis' in window) { try { speechSynthesis.onvoiceschanged = pickVoice; } catch (e) { } }
+  function speakNow(text) { try { pickVoice(); speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); if (voice) { u.voice = voice; u.lang = voice.lang; } else u.lang = 'en-GB'; u.rate = 0.97; speechSynthesis.speak(u); } catch (e) { } }
+  function renderVoiceSheet() {
+    const on = !!state.prefs.voice, sel = $('#voice-select'), ok = 'speechSynthesis' in window;
+    $('#voice-on').setAttribute('aria-checked', String(on));
+    $('#voice').setAttribute('aria-pressed', String(on));
+    const vs = sortedVoices(), best = vs[0];
+    sel.innerHTML = `<option value="">Automatic${best ? ' (' + esc(best.name) + ')' : ''}</option>` + vs.map(v => `<option value="${esc(v.name)}">${esc(v.name)} · ${esc(v.lang)}</option>`).join('');
+    sel.value = vs.some(v => v.name === state.prefs.voiceName) ? state.prefs.voiceName : '';
+    sel.disabled = !ok || !vs.length; $('#voice-test').disabled = !ok;
+    if (!ok) $('#voice-hint').textContent = 'This browser cannot speak announcements.';
+  }
   function say(text, delay) {
     if (!state.prefs.voice || !('speechSynthesis' in window) || !text) return;
-    setTimeout(() => { try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); if (voice) u.voice = voice; u.lang = 'en-GB'; u.rate = 0.97; speechSynthesis.speak(u); } catch (e) { } }, delay == null ? 650 : delay);
+    setTimeout(() => speakNow(text), delay == null ? 650 : delay);
   }
   function speechFor(it, prev) {
     if (!it) return '';
@@ -1711,7 +1806,11 @@ body[data-view="setup"] #toasts { bottom: calc(110px + env(safe-area-inset-botto
     $('#bust').addEventListener('click', bust);
     $('#reentry').addEventListener('click', buyBack);
     $('#sound').addEventListener('click', e => { state.prefs.sound = !state.prefs.sound; e.currentTarget.setAttribute('aria-pressed', state.prefs.sound); save(); if (state.prefs.sound) play('warn'); });
-    $('#voice').addEventListener('click', e => { state.prefs.voice = !state.prefs.voice; e.currentTarget.setAttribute('aria-pressed', state.prefs.voice); save(); if (state.prefs.voice) say('Announcements on.', 0); else try { speechSynthesis.cancel(); } catch (x) { } });
+    $('#voice').addEventListener('click', () => { pickVoice(); renderVoiceSheet(); openSheet('voice-sheet'); });
+    $('#voice-on').addEventListener('click', () => { state.prefs.voice = !state.prefs.voice; save(); renderVoiceSheet(); if (state.prefs.voice) say('Announcements on.', 0); else try { speechSynthesis.cancel(); } catch (x) { } });
+    $('#voice-select').addEventListener('change', e => { state.prefs.voiceName = e.target.value; save(); pickVoice(); });
+    $('#voice-test').addEventListener('click', () => speakNow('Level seven. Blinds are now three hundred and six hundred.'));
+    $('#hands-btn').addEventListener('click', () => { renderHands(); openSheet('hands-sheet'); });
     const fsBtn = $('#fs');
     if (!document.fullscreenEnabled && !document.webkitFullscreenEnabled) fsBtn.hidden = true;
     fsBtn.addEventListener('click', () => {
@@ -1727,8 +1826,9 @@ body[data-view="setup"] #toasts { bottom: calc(110px + env(safe-area-inset-botto
     $('#champ-new').addEventListener('click', () => { $('#champion').hidden = true; resetTournament(); go('setup'); });
 
     document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') { ['chip-sheet', 'reset-sheet'].forEach(id => { if (!$('#' + id).hidden) closeSheet(id); }); return; }
-      if (currentView !== 'clock' || !$('#chip-sheet').hidden || !$('#reset-sheet').hidden || !$('#champion').hidden) return;
+      if (e.key === 'Escape') { ['chip-sheet', 'reset-sheet', 'voice-sheet', 'hands-sheet'].forEach(id => { if (!$('#' + id).hidden) closeSheet(id); }); return; }
+      if ((e.key === 'h' || e.key === 'H') && !['input', 'select', 'textarea'].includes((e.target.tagName || '').toLowerCase()) && $('#chip-sheet').hidden && $('#reset-sheet').hidden && $('#voice-sheet').hidden) { if ($('#hands-sheet').hidden) $('#hands-btn').click(); else closeSheet('hands-sheet'); return; }
+      if (currentView !== 'clock' || !$('#chip-sheet').hidden || !$('#reset-sheet').hidden || !$('#voice-sheet').hidden || !$('#hands-sheet').hidden || !$('#champion').hidden) return;
       const tag = (e.target.tagName || '').toLowerCase();
       if (['input', 'select', 'textarea'].includes(tag)) return;
       if (e.key === ' ' || e.code === 'Space') { e.preventDefault(); if (!e.repeat) togglePlay(); }
@@ -1756,6 +1856,7 @@ body[data-view="setup"] #toasts { bottom: calc(110px + env(safe-area-inset-botto
     buildRing(); bind();
     $('#sound').setAttribute('aria-pressed', state.prefs.sound);
     $('#voice').setAttribute('aria-pressed', state.prefs.voice);
+    pickVoice();
     renderSetup(); route();
     if (state.clock.running) keepAwake(true);
     setInterval(tick, 200); tick();

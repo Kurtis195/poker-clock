@@ -453,6 +453,37 @@ html, body, button, a, input, select, .tile { touch-action: manipulation; }
 @media (max-width: 760px) { .hands { grid-template-columns: 1fr; grid-template-rows: none; grid-auto-flow: row; } }
 @media (max-width: 420px) { .pc { width: 30px; height: 42px; font-size: .85rem; } }
 
+
+/* ---------- Splash screen ---------- */
+#splash { position: fixed; inset: 0; z-index: 200; background: #7B4BB8; overflow: hidden; cursor: pointer; }
+#splash.out { opacity: 0; transition: opacity .45s ease; }
+.sp-stage { position: absolute; left: 50%; top: 50%; width: 1180px; height: 820px; margin: -410px 0 0 -590px; }
+.sp-rays { position: absolute; inset: 0; overflow: visible; }
+.sp-pile { position: absolute; left: 210px; top: 157px; width: 760px; height: 360px; transform: translateY(150px); }
+.sp-chip { position: absolute; left: 50%; top: 50%; width: 220px; height: 220px; margin: -110px 0 0 -110px; }
+.sp-persp { position: absolute; inset: 0; perspective: 1400px; }
+.sp-rot { position: absolute; inset: 0; transform-style: preserve-3d; }
+.sp-l { position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(from 90deg, #2EC4B6 0deg 8deg, #fff 8deg 22deg, #FFE066 22deg 38deg, #fff 38deg 52deg, #FF8FB1 52deg 68deg, #fff 68deg 82deg, #9AD1F5 82deg 98deg, #fff 98deg 112deg, #FF9F43 112deg 128deg, #fff 128deg 142deg, #7B4BB8 142deg 158deg, #fff 158deg 172deg, #2EC4B6 172deg 188deg, #fff 188deg 202deg, #FFE066 202deg 218deg, #fff 218deg 232deg, #FF8FB1 232deg 248deg, #fff 248deg 262deg, #9AD1F5 262deg 278deg, #fff 278deg 292deg, #FF9F43 292deg 308deg, #fff 308deg 322deg, #7B4BB8 322deg 338deg, #fff 338deg 352deg, #2EC4B6 352deg 360deg); }
+.sp-rim { border: 1px solid #1B1B1B; box-sizing: border-box; }
+.sp-face { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+
+/* ---------- Game over: End 2 ---------- */
+.champ.ep { display: block; padding: 0; background: #7B4BB8; color: #FFF8EC; overflow: hidden; text-align: center; }
+.ep-area { position: absolute; inset: 0; overflow: hidden; }
+.ep-stage { position: absolute; left: 50%; top: 50%; width: 1180px; height: 820px; margin: -410px 0 0 -590px; }
+.champ.ep .ep-head { position: absolute; left: 0; right: 0; top: 112px; margin: 0; font: 400 64px/1 var(--f-display); letter-spacing: -.02em; text-transform: uppercase; color: #FFF8EC; z-index: 60; }
+.champ.ep .ep-meta { position: absolute; left: 0; right: 0; top: 190px; margin: 0 auto; max-width: 900px; font: 600 19px/1.35 var(--f-ui); color: #FFF8EC; opacity: .85; z-index: 60; }
+.ep-pan, .ep-world { position: absolute; inset: 0; }
+.ep-world { transform-origin: 590px 487px; }
+.ep-tiles { list-style: none; margin: 0; padding: 0; position: absolute; inset: 0; }
+.ep-tiles li { position: absolute; top: 598px; box-sizing: border-box; padding: calc(16px * var(--ts)) 12px calc(18px * var(--ts)); color: #1B1B1B; border: 3px solid #1B1B1B; border-radius: 18px; box-shadow: 6px 6px 0 #1B1B1B; z-index: 60; text-align: center; font-variant-numeric: tabular-nums; }
+.ep-tiles .pl { display: block; font: 700 calc(17px * var(--ts))/1 var(--f-ui); letter-spacing: .1em; text-transform: uppercase; }
+.ep-tiles .amt { display: block; font: 400 calc(46px * var(--ts))/1 var(--f-display); margin-top: 8px; letter-spacing: -.02em; white-space: nowrap; }
+.ep-foot { position: absolute; left: 0; right: 0; bottom: 0; box-sizing: border-box; padding: 0 20px max(18px, env(safe-area-inset-bottom)); display: flex; gap: 14px; justify-content: center; align-items: center; z-index: 70; }
+.champ.ep .btn { background: #FFF8EC; color: #1B1B1B; border-color: #1B1B1B; box-shadow: 4px 4px 0 #1B1B1B; }
+.champ.ep .btn.primary { background: #FFE066; }
+
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 
 /* ---------- Phones ---------- */
@@ -514,12 +545,14 @@ html, body, button, a, input, select, .tile { touch-action: manipulation; }
   .podium li.first .amt { font-size: 2rem; }
   .champ .btn { padding: .9rem 1.1rem; }
 }
+.mark.chip-mark { width: 48px; height: 48px; background: none; border: 0; box-shadow: none; border-radius: 0; }
+.mark.chip-mark svg { width: 48px; height: 48px; display: block; }
 </style>
 </head>
 <body data-view="setup">
 <header class="top">
   <div class="brand">
-    <span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 1.8C9.2 5.6 3.6 8.7 3.6 13.3c0 2.8 2.2 4.9 4.8 4.9 1.4 0 2.6-.6 3.2-1.5-.2 2-1.1 3.7-2.8 5.1h6.4c-1.7-1.4-2.6-3.1-2.8-5.1.6.9 1.8 1.5 3.2 1.5 2.6 0 4.8-2.1 4.8-4.9 0-4.6-5.6-7.7-8.4-11.5z"/></svg></span>
+    <span class="mark chip-mark" aria-hidden="true"><svg viewBox="22 22 140 140"><circle cx="96" cy="96" r="64" fill="#1b1b1b"/><circle cx="90" cy="90" r="64" fill="#ffffff" stroke="#1b1b1b" stroke-width="4"/><path fill="#2ec4b6" d="M151.4 81.4 A62 62 0 0 1 151.4 98.6 L137.5 96.7 A48 48 0 0 0 137.5 83.3Z"/><path fill="#ffe066" d="M147.5 113.2 A62 62 0 0 1 138.9 128.2 L127.8 119.6 A48 48 0 0 0 134.5 108.0Z"/><path fill="#ff8fb1" d="M128.2 138.9 A62 62 0 0 1 113.2 147.5 L108.0 134.5 A48 48 0 0 0 119.6 127.8Z"/><path fill="#9ad1f5" d="M98.6 151.4 A62 62 0 0 1 81.4 151.4 L83.3 137.5 A48 48 0 0 0 96.7 137.5Z"/><path fill="#ff9f43" d="M66.8 147.5 A62 62 0 0 1 51.8 138.9 L60.4 127.8 A48 48 0 0 0 72.0 134.5Z"/><path fill="#7b4bb8" d="M41.1 128.2 A62 62 0 0 1 32.5 113.2 L45.5 108.0 A48 48 0 0 0 52.2 119.6Z"/><path fill="#2ec4b6" d="M28.6 98.6 A62 62 0 0 1 28.6 81.4 L42.5 83.3 A48 48 0 0 0 42.5 96.7Z"/><path fill="#ffe066" d="M32.5 66.8 A62 62 0 0 1 41.1 51.8 L52.2 60.4 A48 48 0 0 0 45.5 72.0Z"/><path fill="#ff8fb1" d="M51.8 41.1 A62 62 0 0 1 66.8 32.5 L72.0 45.5 A48 48 0 0 0 60.4 52.2Z"/><path fill="#9ad1f5" d="M81.4 28.6 A62 62 0 0 1 98.6 28.6 L96.7 42.5 A48 48 0 0 0 83.3 42.5Z"/><path fill="#ff9f43" d="M113.2 32.5 A62 62 0 0 1 128.2 41.1 L119.6 52.2 A48 48 0 0 0 108.0 45.5Z"/><path fill="#7b4bb8" d="M138.9 51.8 A62 62 0 0 1 147.5 66.8 L134.5 72.0 A48 48 0 0 0 127.8 60.4Z"/><circle cx="90" cy="90" r="42" fill="#ffffff" stroke="#1b1b1b" stroke-width="2.5" stroke-dasharray="4 5"/><g transform="translate(90 90) scale(2.8) translate(-12 -12.3)"><path fill="#1b1b1b" d="M12 1.8C9.2 5.6 3.6 8.7 3.6 13.3c0 2.8 2.2 4.9 4.8 4.9 1.4 0 2.6-.6 3.2-1.5-.2 2-1.1 3.7-2.8 5.1h6.4c-1.7-1.4-2.6-3.1-2.8-5.1.6.9 1.8 1.5 3.2 1.5 2.6 0 4.8-2.1 4.8-4.9 0-4.6-5.6-7.7-8.4-11.5z"/></g></svg></span>
     <input id="t-name" class="t-name" type="text" maxlength="40" aria-label="Tournament name" autocomplete="off" spellcheck="false">
   </div>
   <button type="button" class="icon-btn txt" id="hands-btn" aria-haspopup="dialog" title="Hand rankings (H)">Hands</button>
@@ -725,6 +758,14 @@ html, body, button, a, input, select, .tile { touch-action: manipulation; }
   </button>
 </div>
 
+<svg width="0" height="0" style="position:absolute"><defs><symbol id="sp-face" viewBox="26 26 128 128"><circle cx="90" cy="90" r="64" fill="#fff"/><path fill="#2EC4B6" d="M153.4 81.1A64 64 0 0 1 153.4 98.9L138.5 96.8A49 49 0 0 0 138.5 83.2Z"/><path fill="#FFE066" d="M149.3 114.0A64 64 0 0 1 140.4 129.4L128.6 120.2A49 49 0 0 0 135.4 108.4Z"/><path fill="#FF8FB1" d="M129.4 140.4A64 64 0 0 1 114.0 149.3L108.4 135.4A49 49 0 0 0 120.2 128.6Z"/><path fill="#9AD1F5" d="M98.9 153.4A64 64 0 0 1 81.1 153.4L83.2 138.5A49 49 0 0 0 96.8 138.5Z"/><path fill="#FF9F43" d="M66.0 149.3A64 64 0 0 1 50.6 140.4L59.8 128.6A49 49 0 0 0 71.6 135.4Z"/><path fill="#7B4BB8" d="M39.6 129.4A64 64 0 0 1 30.7 114.0L44.6 108.4A49 49 0 0 0 51.4 120.2Z"/><path fill="#2EC4B6" d="M26.6 98.9A64 64 0 0 1 26.6 81.1L41.5 83.2A49 49 0 0 0 41.5 96.8Z"/><path fill="#FFE066" d="M30.7 66.0A64 64 0 0 1 39.6 50.6L51.4 59.8A49 49 0 0 0 44.6 71.6Z"/><path fill="#FF8FB1" d="M50.6 39.6A64 64 0 0 1 66.0 30.7L71.6 44.6A49 49 0 0 0 59.8 51.4Z"/><path fill="#9AD1F5" d="M81.1 26.6A64 64 0 0 1 98.9 26.6L96.8 41.5A49 49 0 0 0 83.2 41.5Z"/><path fill="#FF9F43" d="M114.0 30.7A64 64 0 0 1 129.4 39.6L120.2 51.4A49 49 0 0 0 108.4 44.6Z"/><path fill="#7B4BB8" d="M140.4 50.6A64 64 0 0 1 149.3 66.0L135.4 71.6A49 49 0 0 0 128.6 59.8Z"/><circle cx="90" cy="90" r="42" fill="#fff" stroke="#1B1B1B" stroke-width="2" stroke-dasharray="4 5"/><circle cx="90" cy="90" r="63.4" fill="none" stroke="#1B1B1B" stroke-width="1.2"/><g transform="translate(90 90) scale(2.8) translate(-12 -12.3)"><path fill="#1B1B1B" d="M12 1.8C9.2 5.6 3.6 8.7 3.6 13.3c0 2.8 2.2 4.9 4.8 4.9 1.4 0 2.6-.6 3.2-1.5-.2 2-1.1 3.7-2.8 5.1h6.4c-1.7-1.4-2.6-3.1-2.8-5.1.6.9 1.8 1.5 3.2 1.5 2.6 0 4.8-2.1 4.8-4.9 0-4.6-5.6-7.7-8.4-11.5z"/></g></symbol><symbol id="sp-face-b" viewBox="26 26 128 128"><g transform="translate(180 0) scale(-1 1)"><circle cx="90" cy="90" r="64" fill="#fff"/><path fill="#2EC4B6" d="M153.4 81.1A64 64 0 0 1 153.4 98.9L138.5 96.8A49 49 0 0 0 138.5 83.2Z"/><path fill="#FFE066" d="M149.3 114.0A64 64 0 0 1 140.4 129.4L128.6 120.2A49 49 0 0 0 135.4 108.4Z"/><path fill="#FF8FB1" d="M129.4 140.4A64 64 0 0 1 114.0 149.3L108.4 135.4A49 49 0 0 0 120.2 128.6Z"/><path fill="#9AD1F5" d="M98.9 153.4A64 64 0 0 1 81.1 153.4L83.2 138.5A49 49 0 0 0 96.8 138.5Z"/><path fill="#FF9F43" d="M66.0 149.3A64 64 0 0 1 50.6 140.4L59.8 128.6A49 49 0 0 0 71.6 135.4Z"/><path fill="#7B4BB8" d="M39.6 129.4A64 64 0 0 1 30.7 114.0L44.6 108.4A49 49 0 0 0 51.4 120.2Z"/><path fill="#2EC4B6" d="M26.6 98.9A64 64 0 0 1 26.6 81.1L41.5 83.2A49 49 0 0 0 41.5 96.8Z"/><path fill="#FFE066" d="M30.7 66.0A64 64 0 0 1 39.6 50.6L51.4 59.8A49 49 0 0 0 44.6 71.6Z"/><path fill="#FF8FB1" d="M50.6 39.6A64 64 0 0 1 66.0 30.7L71.6 44.6A49 49 0 0 0 59.8 51.4Z"/><path fill="#9AD1F5" d="M81.1 26.6A64 64 0 0 1 98.9 26.6L96.8 41.5A49 49 0 0 0 83.2 41.5Z"/><path fill="#FF9F43" d="M114.0 30.7A64 64 0 0 1 129.4 39.6L120.2 51.4A49 49 0 0 0 108.4 44.6Z"/><path fill="#7B4BB8" d="M140.4 50.6A64 64 0 0 1 149.3 66.0L135.4 71.6A49 49 0 0 0 128.6 59.8Z"/><circle cx="90" cy="90" r="42" fill="#fff" stroke="#1B1B1B" stroke-width="2" stroke-dasharray="4 5"/><circle cx="90" cy="90" r="63.4" fill="none" stroke="#1B1B1B" stroke-width="1.2"/><g transform="translate(90 90) scale(2.8) translate(-12 -12.3)"><path fill="#1B1B1B" d="M12 1.8C9.2 5.6 3.6 8.7 3.6 13.3c0 2.8 2.2 4.9 4.8 4.9 1.4 0 2.6-.6 3.2-1.5-.2 2-1.1 3.7-2.8 5.1h6.4c-1.7-1.4-2.6-3.1-2.8-5.1.6.9 1.8 1.5 3.2 1.5 2.6 0 4.8-2.1 4.8-4.9 0-4.6-5.6-7.7-8.4-11.5z"/></g></g></symbol></defs></svg>
+<div id="splash" hidden aria-hidden="true">
+  
+  <div class="sp-stage">
+    <div class="sp-pile"><div class="sp-chip" style="z-index:1"><div class="sp-persp"><div class="sp-rot"><i class="sp-l sp-rim" style="filter:brightness(0.82);transform:translateZ(-9.0px)"></i><i class="sp-l" style="filter:brightness(0.79);transform:translateZ(-7.0px)"></i><i class="sp-l" style="filter:brightness(0.77);transform:translateZ(-5.0px)"></i><i class="sp-l" style="filter:brightness(0.74);transform:translateZ(-3.0px)"></i><i class="sp-l" style="filter:brightness(0.71);transform:translateZ(-1.0px)"></i><i class="sp-l" style="filter:brightness(0.71);transform:translateZ(1.0px)"></i><i class="sp-l" style="filter:brightness(0.74);transform:translateZ(3.0px)"></i><i class="sp-l" style="filter:brightness(0.77);transform:translateZ(5.0px)"></i><i class="sp-l" style="filter:brightness(0.79);transform:translateZ(7.0px)"></i><i class="sp-l sp-rim" style="filter:brightness(0.82);transform:translateZ(9.0px)"></i><svg class="sp-face" style="transform:translateZ(-9.5px) rotateY(180deg)" viewBox="0 0 100 100"><use href="#sp-face-b" width="100" height="100"/></svg><svg class="sp-face" style="transform:translateZ(9.5px)" viewBox="0 0 100 100"><use href="#sp-face" width="100" height="100"/></svg></div></div></div><div class="sp-chip" style="z-index:2"><div class="sp-persp"><div class="sp-rot"><i class="sp-l sp-rim" style="filter:brightness(0.82);transform:translateZ(-9.0px)"></i><i class="sp-l" style="filter:brightness(0.79);transform:translateZ(-7.0px)"></i><i class="sp-l" style="filter:brightness(0.77);transform:translateZ(-5.0px)"></i><i class="sp-l" style="filter:brightness(0.74);transform:translateZ(-3.0px)"></i><i class="sp-l" style="filter:brightness(0.71);transform:translateZ(-1.0px)"></i><i class="sp-l" style="filter:brightness(0.71);transform:translateZ(1.0px)"></i><i class="sp-l" style="filter:brightness(0.74);transform:translateZ(3.0px)"></i><i class="sp-l" style="filter:brightness(0.77);transform:translateZ(5.0px)"></i><i class="sp-l" style="filter:brightness(0.79);transform:translateZ(7.0px)"></i><i class="sp-l sp-rim" style="filter:brightness(0.82);transform:translateZ(9.0px)"></i><svg class="sp-face" style="transform:translateZ(-9.5px) rotateY(180deg)" viewBox="0 0 100 100"><use href="#sp-face-b" width="100" height="100"/></svg><svg class="sp-face" style="transform:translateZ(9.5px)" viewBox="0 0 100 100"><use href="#sp-face" width="100" height="100"/></svg></div></div></div><div class="sp-chip" style="z-index:3"><div class="sp-persp"><div class="sp-rot"><i class="sp-l sp-rim" style="filter:brightness(0.82);transform:translateZ(-9.0px)"></i><i class="sp-l" style="filter:brightness(0.79);transform:translateZ(-7.0px)"></i><i class="sp-l" style="filter:brightness(0.77);transform:translateZ(-5.0px)"></i><i class="sp-l" style="filter:brightness(0.74);transform:translateZ(-3.0px)"></i><i class="sp-l" style="filter:brightness(0.71);transform:translateZ(-1.0px)"></i><i class="sp-l" style="filter:brightness(0.71);transform:translateZ(1.0px)"></i><i class="sp-l" style="filter:brightness(0.74);transform:translateZ(3.0px)"></i><i class="sp-l" style="filter:brightness(0.77);transform:translateZ(5.0px)"></i><i class="sp-l" style="filter:brightness(0.79);transform:translateZ(7.0px)"></i><i class="sp-l sp-rim" style="filter:brightness(0.82);transform:translateZ(9.0px)"></i><svg class="sp-face" style="transform:translateZ(-9.5px) rotateY(180deg)" viewBox="0 0 100 100"><use href="#sp-face-b" width="100" height="100"/></svg><svg class="sp-face" style="transform:translateZ(9.5px)" viewBox="0 0 100 100"><use href="#sp-face" width="100" height="100"/></svg></div></div></div><div class="sp-chip" style="z-index:4"><div class="sp-persp"><div class="sp-rot"><i class="sp-l sp-rim" style="filter:brightness(0.82);transform:translateZ(-9.0px)"></i><i class="sp-l" style="filter:brightness(0.79);transform:translateZ(-7.0px)"></i><i class="sp-l" style="filter:brightness(0.77);transform:translateZ(-5.0px)"></i><i class="sp-l" style="filter:brightness(0.74);transform:translateZ(-3.0px)"></i><i class="sp-l" style="filter:brightness(0.71);transform:translateZ(-1.0px)"></i><i class="sp-l" style="filter:brightness(0.71);transform:translateZ(1.0px)"></i><i class="sp-l" style="filter:brightness(0.74);transform:translateZ(3.0px)"></i><i class="sp-l" style="filter:brightness(0.77);transform:translateZ(5.0px)"></i><i class="sp-l" style="filter:brightness(0.79);transform:translateZ(7.0px)"></i><i class="sp-l sp-rim" style="filter:brightness(0.82);transform:translateZ(9.0px)"></i><svg class="sp-face" style="transform:translateZ(-9.5px) rotateY(180deg)" viewBox="0 0 100 100"><use href="#sp-face-b" width="100" height="100"/></svg><svg class="sp-face" style="transform:translateZ(9.5px)" viewBox="0 0 100 100"><use href="#sp-face" width="100" height="100"/></svg></div></div></div><div class="sp-chip" style="z-index:5"><div class="sp-persp"><div class="sp-rot"><i class="sp-l sp-rim" style="filter:brightness(0.82);transform:translateZ(-9.0px)"></i><i class="sp-l" style="filter:brightness(0.79);transform:translateZ(-7.0px)"></i><i class="sp-l" style="filter:brightness(0.77);transform:translateZ(-5.0px)"></i><i class="sp-l" style="filter:brightness(0.74);transform:translateZ(-3.0px)"></i><i class="sp-l" style="filter:brightness(0.71);transform:translateZ(-1.0px)"></i><i class="sp-l" style="filter:brightness(0.71);transform:translateZ(1.0px)"></i><i class="sp-l" style="filter:brightness(0.74);transform:translateZ(3.0px)"></i><i class="sp-l" style="filter:brightness(0.77);transform:translateZ(5.0px)"></i><i class="sp-l" style="filter:brightness(0.79);transform:translateZ(7.0px)"></i><i class="sp-l sp-rim" style="filter:brightness(0.82);transform:translateZ(9.0px)"></i><svg class="sp-face" style="transform:translateZ(-9.5px) rotateY(180deg)" viewBox="0 0 100 100"><use href="#sp-face-b" width="100" height="100"/></svg><svg class="sp-face" style="transform:translateZ(9.5px)" viewBox="0 0 100 100"><use href="#sp-face" width="100" height="100"/></svg></div></div></div><div class="sp-chip" style="z-index:6"><div class="sp-persp"><div class="sp-rot"><i class="sp-l sp-rim" style="filter:brightness(0.82);transform:translateZ(-9.0px)"></i><i class="sp-l" style="filter:brightness(0.79);transform:translateZ(-7.0px)"></i><i class="sp-l" style="filter:brightness(0.77);transform:translateZ(-5.0px)"></i><i class="sp-l" style="filter:brightness(0.74);transform:translateZ(-3.0px)"></i><i class="sp-l" style="filter:brightness(0.71);transform:translateZ(-1.0px)"></i><i class="sp-l" style="filter:brightness(0.71);transform:translateZ(1.0px)"></i><i class="sp-l" style="filter:brightness(0.74);transform:translateZ(3.0px)"></i><i class="sp-l" style="filter:brightness(0.77);transform:translateZ(5.0px)"></i><i class="sp-l" style="filter:brightness(0.79);transform:translateZ(7.0px)"></i><i class="sp-l sp-rim" style="filter:brightness(0.82);transform:translateZ(9.0px)"></i><svg class="sp-face" style="transform:translateZ(-9.5px) rotateY(180deg)" viewBox="0 0 100 100"><use href="#sp-face-b" width="100" height="100"/></svg><svg class="sp-face" style="transform:translateZ(9.5px)" viewBox="0 0 100 100"><use href="#sp-face" width="100" height="100"/></svg></div></div></div></div>
+  </div>
+</div>
+
 <div id="toasts" role="status" aria-live="polite"></div>
 
 <div class="sheet-wrap" id="chip-sheet" hidden>
@@ -792,19 +833,21 @@ html, body, button, a, input, select, .tile { touch-action: manipulation; }
   </div>
 </div>
 
-<div id="champion" class="champ" hidden>
-  <canvas id="confetti"></canvas>
-  <div class="inner">
-    <span class="label">Last player standing</span>
-    <h2>Game over</h2>
-    <ol class="podium" id="champ-podium" aria-label="Winnings"></ol>
-    <p id="champ-meta"></p>
-    <div class="row">
-      <button type="button" class="btn outline" id="champ-close">Back to the table</button>
-      <button type="button" class="btn primary" id="champ-new">Run it back</button>
+<div id="champion" class="champ ep" hidden role="dialog" aria-modal="true" aria-labelledby="champ-title">
+  <div class="ep-area">
+    <div class="ep-stage">
+      <h2 class="ep-head" id="champ-title">Game over</h2>
+      <p class="ep-meta" id="champ-meta"></p>
+      <div class="ep-pan">
+        <div class="ep-world"><div class="sp-pile ep-pile"></div></div>
+        <ol class="ep-tiles" id="champ-podium" aria-label="Winnings"></ol>
+      </div>
     </div>
   </div>
-  <div class="stripe" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="ep-foot">
+    <button type="button" class="btn outline" id="champ-close">Back to the table</button>
+    <button type="button" class="btn primary" id="champ-new">Run it back</button>
+  </div>
 </div>
 
 <script>
@@ -1679,6 +1722,86 @@ html, body, button, a, input, select, .tile { touch-action: manipulation; }
     $('#live-dot').hidden = true;
   }
 
+
+  /* ---------- Game over animation (End 2) ----------
+     Starts from the splash's finished pile, more chips drop onto it, then a pile forms for each other
+     paid place (2nd left, 3rd right, 4th further left...). Pile heights follow the payouts and the view
+     slides so the row ends centred. Then the payouts, the heading and the summary pop in. Tap to skip. */
+  const EP_CHIP = '<div class="sp-chip"><div class="sp-persp"><div class="sp-rot"><i class="sp-l sp-rim" style="filter:brightness(0.82);transform:translateZ(-9.0px)"></i><i class="sp-l" style="filter:brightness(0.79);transform:translateZ(-7.0px)"></i><i class="sp-l" style="filter:brightness(0.77);transform:translateZ(-5.0px)"></i><i class="sp-l" style="filter:brightness(0.74);transform:translateZ(-3.0px)"></i><i class="sp-l" style="filter:brightness(0.71);transform:translateZ(-1.0px)"></i><i class="sp-l" style="filter:brightness(0.71);transform:translateZ(1.0px)"></i><i class="sp-l" style="filter:brightness(0.74);transform:translateZ(3.0px)"></i><i class="sp-l" style="filter:brightness(0.77);transform:translateZ(5.0px)"></i><i class="sp-l" style="filter:brightness(0.79);transform:translateZ(7.0px)"></i><i class="sp-l sp-rim" style="filter:brightness(0.82);transform:translateZ(9.0px)"></i><svg class="sp-face" style="transform:translateZ(-9.5px) rotateY(180deg)" viewBox="0 0 100 100"><use href="#sp-face-b" width="100" height="100"/></svg><svg class="sp-face" style="transform:translateZ(9.5px)" viewBox="0 0 100 100"><use href="#sp-face" width="100" height="100"/></svg></div></div></div>';
+  let epAnims = [], epFit = null;
+  function stopEndAnim() {
+    epAnims.forEach(a => a.cancel()); epAnims = [];
+    if (epFit) { removeEventListener('resize', epFit); epFit = null; }
+  }
+  function runEndAnim(places) {
+    stopEndAnim();
+    const root = $('#champion'), area = $('.ep-area', root), stage = $('.ep-stage', root), pile = $('.ep-pile', root);
+    const world = $('.ep-world', root), pan = $('.ep-pan', root);
+    const N = places.length;
+    const S = Math.min(320, 1120 / Math.max(N, 1)), k = Math.min(1, (S - 24) / 220);   // pile spacing and chip scale
+    world.style.transform = `scale(${k.toFixed(3)})`;
+    const xs = places.map((_, j) => j === 0 ? 0 : (j % 2 ? -1 : 1) * Math.ceil(j / 2) * S);
+    const mid = xs.reduce((a, b) => a + b, 0) / Math.max(N, 1);
+    const tw = Math.min(210, S - 18);
+    $$('li', $('#champ-podium')).forEach((li, j) => {
+      li.style.width = tw + 'px'; li.style.left = (590 + xs[j] - tw / 2) + 'px'; li.style.setProperty('--ts', Math.min(1, tw / 210).toFixed(3));
+    });
+    let ks = 1;
+    epFit = () => { ks = Math.min(area.clientWidth / 1180, area.clientHeight / 820); /* same fit as the splash */ stage.style.transform = `scale(${ks.toFixed(3)})`; };
+    epFit(); addEventListener('resize', epFit);
+    // chips: 6 from the splash, 4 more on 1st, then each other pile
+    const first = places[0].amount || 1;
+    const hts = places.map((p, j) => j === 0 ? 10 : Math.max(1, Math.min(9, Math.round(10 * p.amount / first))));
+    const drops = [];
+    for (let l = 6; l < 10; l++) drops.push([0, l]);
+    for (let l = 0; l < 9; l++) for (let j = 1; j < N; j++) if (l < hts[j]) drops.push([j, l]);
+    const total = 6 + drops.length;
+    pile.innerHTML = Array.from({ length: total }, () => EP_CHIP).join('');
+    const chips = $$('.sp-chip', pile);
+    const SIN = Math.sin(62 * Math.PI / 180), COS = Math.cos(62 * Math.PI / 180), L = 20;
+    const FALL = 'cubic-bezier(.7,0,1,.5)', EASE = 'cubic-bezier(.45,.05,.35,1)';
+    const rnd = (a, b) => a + Math.random() * (b - a), sign = () => (Math.random() < .5 ? -1 : 1);
+    const pos = (px, py, lv) => `translate(${px.toFixed(1)}px, ${(py * COS - lv * L * SIN).toFixed(1)}px)`;
+    const rot = (rz, ax, ay) => `rotateX(62deg) rotateZ(${rz.toFixed(1)}deg) rotateX(${ax.toFixed(1)}deg) rotateY(${ay.toFixed(1)}deg)`;
+    // start high enough to be off the top of the screen, whatever its shape
+    const topY = 410 - (area.clientHeight / 2) / ks;
+    const FROM = Math.max(34, (487 - (topY - 160)) / (L * SIN * k));
+    const opts = { fill: 'both' };
+    chips.forEach((c, i) => { c.style.zIndex = i + 1; });
+    for (let i = 0; i < 6; i++) {                       // the splash pile, already sitting there
+      const x = i ? rnd(-9, 9) : 0, y = i ? rnd(-7, 7) : 0;
+      chips[i].style.transform = pos(x, y, i); $('.sp-rot', chips[i]).style.transform = rot(i ? rnd(-6, 6) : 0, 0, 0);
+    }
+    let t = 700; const gap = Math.max(90, Math.min(170, 2200 / Math.max(1, drops.length - 4)));
+    let firstSide = null, last = t;
+    drops.forEach(([j, lv], d) => {
+      const c = chips[6 + d], x = xs[j] / k + rnd(-9, 9), y = rnd(-7, 7), r = rnd(-6, 6);
+      const flat = Math.random() < .45, tx = flat ? 0 : sign() * rnd(6, 12), ty = flat ? 0 : sign() * rnd(4, 14);
+      if (j > 0 && firstSide === null) firstSide = t;
+      const dur = 470;
+      epAnims.push(c.animate([
+        { offset: 0, transform: pos(x, y, FROM), easing: FALL },
+        { offset: 320 / dur, transform: pos(x, y, lv), easing: EASE },
+        { offset: 400 / dur, transform: pos(x, y, lv + .12), easing: EASE },
+        { offset: 1, transform: pos(x, y, lv) }], { duration: dur, delay: t, ...opts }));
+      epAnims.push($('.sp-rot', c).animate([
+        { offset: 0, transform: rot(r * .3, 0, 0), easing: FALL },
+        { offset: 320 / dur, transform: rot(r, tx, ty), easing: EASE },
+        { offset: 400 / dur, transform: rot(r, -tx * .25, -ty * .25), easing: EASE },
+        { offset: 1, transform: rot(r, 0, 0) }], { duration: dur, delay: t, ...opts }));
+      last = t + dur; t += j === 0 ? 200 : gap;
+    });
+    if (N > 1) epAnims.push(pan.animate([{ transform: 'none' }, { transform: `translateX(${(-mid).toFixed(1)}px)` }],
+      { duration: 1000, delay: firstSide || 900, easing: EASE, ...opts }));
+    else pan.style.transform = '';
+    const popIn = (el, at) => epAnims.push(el.animate([{ opacity: 0, transform: 'translateY(26px)' }, { opacity: 1, transform: 'none' }],
+      { duration: 450, delay: at, easing: 'cubic-bezier(.22,1.4,.36,1)', ...opts }));
+    let at = last - 150;
+    $$('li', $('#champ-podium')).reverse().forEach(li => { popIn(li, at); at += Math.max(110, Math.min(200, 700 / N)); });
+    popIn($('.ep-head', root), at + 150); popIn($('.ep-meta', root), at + 300);
+    if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) epAnims.forEach(a => a.finish());
+  }
+
   /* ---------- Champion ---------- */
   let confettiRun = 0;
   function champion() {
@@ -1687,15 +1810,15 @@ html, body, button, a, input, select, .tile { touch-action: manipulation; }
     c.done = true; saveNow();
     const po = payouts(), lv = levelFor(c.idx), second = po.places.find(x => x.place === 2);
     const PODIUM = ['#ffe066', '#9ad1f5', '#ff8fb1', '#ff9f43', '#2ec4b6', '#b9a5ff'];
-    $('#champ-podium').innerHTML = state.setup.buyIn > 0
-      ? po.places.map((pl, i) => `<li class="${i === 0 ? 'first' : ''}" style="background:${PODIUM[i % PODIUM.length]}"><span class="pl">${ordinal(pl.place)}</span><span class="amt">${money(pl.amount)}</span></li>`).join('')
-      : `<li class="first" style="background:${PODIUM[0]}"><span class="pl">Winner</span><span class="amt">Bragging rights</span></li>`;
+    const shown = state.setup.buyIn > 0 ? po.places : [{ place: 1, amount: 1, label: 'Winner', text: 'Bragging rights' }];
+    $('#champ-podium').innerHTML = '';   /* no buy-in: just the pile, no payout tile */
+    if (state.setup.buyIn > 0) $('#champ-podium').innerHTML = shown.map((pl, i) => `<li style="background:${PODIUM[i % PODIUM.length]}"><span class="pl">${pl.label || ordinal(pl.place)}</span><span class="amt">${pl.text || money(pl.amount)}</span></li>`).join('');
     $('#champ-meta').textContent = `${state.setup.name}. ${entries()} entries, ${durStr(c.elapsed)} played${lv ? `, finished at ${fmt(lv.sb)}/${fmt(lv.bb)}` : ''}.`;
     $('#toasts').innerHTML = '';
     $('#champion').hidden = false; $('#champ-close').focus();
     play('fanfare');
     say(`Game over. We have a champion! ${state.setup.buyIn > 0 ? po.places[0].amount + ' pounds to the winner.' : ''}`, 900);
-    paintTime(now); runConfetti();
+    paintTime(now); runEndAnim(shown);
   }
   function runConfetti() {
     if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -1822,8 +1945,9 @@ html, body, button, a, input, select, .tile { touch-action: manipulation; }
       jump(+b.dataset.go, true); renderStructure();
       if (!state.clock.running) { toast('Clock moved. Press play when you’re ready.'); go('clock'); }
     });
-    $('#champ-close').addEventListener('click', () => { $('#champion').hidden = true; });
-    $('#champ-new').addEventListener('click', () => { $('#champion').hidden = true; resetTournament(); go('setup'); });
+    $('#champ-close').addEventListener('click', () => { $('#champion').hidden = true; stopEndAnim(); });
+    $('.ep-area').addEventListener('pointerdown', () => epAnims.forEach(a => a.finish()));
+    $('#champ-new').addEventListener('click', () => { $('#champion').hidden = true; stopEndAnim(); resetTournament(); go('setup'); });
 
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape') { ['chip-sheet', 'reset-sheet', 'voice-sheet', 'hands-sheet'].forEach(id => { if (!$('#' + id).hidden) closeSheet(id); }); return; }
@@ -1850,6 +1974,60 @@ html, body, button, a, input, select, .tile { touch-action: manipulation; }
   }
 
   /* ---------- Boot ---------- */
+
+  /* ---------- Splash screen ----------
+     Shown once each time the app is opened. A pile of chips hangs near the top, the chips drop one at a
+     time (where they land and which ones tip is random each time), the finished pile holds for a second,
+     then it fades into the clock. Tap or press any key to skip. */
+  function runSplash() {
+    const el = $('#splash');
+    if (!el || !el.animate || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) { if (el) el.remove(); return; }
+    el.hidden = false;
+    const stage = $('.sp-stage', el);
+    const fit = () => {
+      const k = Math.min(innerWidth / 1180, innerHeight / 820);
+      stage.style.transform = `scale(${k.toFixed(3)})`;
+    };
+    fit(); addEventListener('resize', fit);
+    const SIN = Math.sin(62 * Math.PI / 180), COS = Math.cos(62 * Math.PI / 180), L = 20, LIFT = 16;
+    const FALL = 'cubic-bezier(.7,0,1,.5)', EASE = 'cubic-bezier(.45,.05,.35,1)', TOTAL = 1250 + 390 + 1000, WAIT = 500;
+    const rnd = (a, b) => a + Math.random() * (b - a), sign = () => (Math.random() < .5 ? -1 : 1);
+    const anims = [];
+    $$('.sp-chip', el).forEach((chip, i) => {
+      const x = i ? rnd(-9, 9) : 0, y = i ? rnd(-7, 7) : 0, r = i ? rnd(-6, 6) : 0;
+      const flat = Math.random() < .45, tx = flat ? 0 : sign() * rnd(6, 12), ty = flat ? 0 : sign() * rnd(4, 14);
+      const ts = i * 250, at = ms => ms / TOTAL;
+      const pos = (px, py, lv) => `translate(${px}px, ${(py * COS - lv * L * SIN).toFixed(1)}px)`;
+      const rot = (rz, ax, ay) => `rotateX(62deg) rotateZ(${rz}deg) rotateX(${ax}deg) rotateY(${ay}deg)`;
+      anims.push(chip.animate([
+        { offset: 0, transform: pos(0, 0, i + LIFT), easing: 'linear' },
+        { offset: at(ts), transform: pos(0, 0, i + LIFT), easing: FALL },
+        { offset: at(ts + 30), transform: pos(x * .3, y * .3, i + LIFT - .1), easing: FALL },
+        { offset: at(ts + 240), transform: pos(x, y, i), easing: EASE },
+        { offset: at(ts + 320), transform: pos(x, y, i + .12), easing: EASE },
+        { offset: at(ts + 390), transform: pos(x, y, i) },
+        { offset: 1, transform: pos(x, y, i) }], { duration: TOTAL, delay: WAIT, fill: 'both' }));
+      anims.push($('.sp-rot', chip).animate([
+        { offset: 0, transform: rot(0, 0, 0), easing: 'linear' },
+        { offset: at(ts), transform: rot(0, 0, 0), easing: FALL },
+        { offset: at(ts + 30), transform: rot(r * .3, tx, ty), easing: FALL },
+        { offset: at(ts + 240), transform: rot(r, tx, ty), easing: EASE },
+        { offset: at(ts + 320), transform: rot(r, -tx * .25, -ty * .25), easing: EASE },
+        { offset: at(ts + 390), transform: rot(r, 0, 0) },
+        { offset: 1, transform: rot(r, 0, 0) }], { duration: TOTAL, delay: WAIT, fill: 'both' }));
+    });
+    let done = false, onKey = null;
+    const finish = fast => {
+      if (done) return; done = true;
+      el.style.transitionDuration = fast ? '.25s' : '.45s'; el.classList.add('out');
+      setTimeout(() => { anims.forEach(a => a.cancel()); removeEventListener('resize', fit); removeEventListener('keydown', onKey, true); el.remove(); }, fast ? 260 : 470);
+    };
+    el.addEventListener('pointerdown', () => finish(true));
+    onKey = e => { if (done) return; e.preventDefault(); e.stopImmediatePropagation(); finish(true); };
+    addEventListener('keydown', onKey, true);
+    setTimeout(() => finish(false), WAIT + TOTAL);
+  }
+
   function start(data) {
     state = normalise(data && data.setup ? data : load());
     try { window.claude && window.claude.hot && window.claude.hot.snapshot && window.claude.hot.snapshot(() => state); } catch (e) { }
@@ -1860,6 +2038,7 @@ html, body, button, a, input, select, .tile { touch-action: manipulation; }
     renderSetup(); route();
     if (state.clock.running) keepAwake(true);
     setInterval(tick, 200); tick();
+    runSplash();
   }
   if (window.claude && window.claude.hot && window.claude.hot.ready) window.claude.hot.ready(start);
   else start((window.claude && window.claude.hot && window.claude.hot.data) || {});
